@@ -1,7 +1,7 @@
 import { assign, Interpreter, Machine, spawn } from "xstate";
-import { skillMachineFactory } from "./skillMachine";
+import { skillMachineFactory, SkillEvent } from "./skillMachine";
 
-export type SkillService = Interpreter<Skill, StateSchema, Events>;
+export type SkillService = Interpreter<Skill, StateSchema, SkillEvent>;
 
 export interface Skill {
   id: string;

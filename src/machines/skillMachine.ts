@@ -19,6 +19,7 @@ interface StateSchema {
       states: {
         uncompleted: {};
         completed: {};
+        hist: {};
       };
     };
     disabled: {};
@@ -56,11 +57,15 @@ export const skillMachineFactory = (skill: Skill) => {
               },
             },
           },
+          hist: {
+            type: "history",
+            history: "shallow",
+          },
         },
       },
       disabled: {
         on: {
-          ENABLE: "disabled",
+          ENABLE: "active.hist",
         },
       },
     },

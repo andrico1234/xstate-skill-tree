@@ -1,5 +1,5 @@
 import { useService } from "@xstate/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { SkillService } from "../../machines/skillTreeMachine";
 
 interface Props {
@@ -11,30 +11,28 @@ export function SkillNode(props: Props) {
   const { skill, skills } = props;
 
   const [state, send] = useService(skill);
-  const isComplete = state.matches("active.completed");
-  const isLocked = state.matches("disabled");
   const { parentIds } = state.context;
 
   const parentMachines = parentIds.map((id) => {
     return skills[id].state;
   });
 
-  const areParentSkillsComplete = parentMachines.every((parentMachine) =>
-    parentMachine.matches("active.completed")
-  );
+  const areParentSkillsComplete = parentMachines.every((parentMachine) => {
+    return parentMachine.matches("active.completed");
+  });
 
-  // use effect are parent skills complete
+  useEffect(() => {
+    if (areParentSkillsComplete) {
+      return send("ENABLE");
+    }
+
+    return send("DISABLE");
+  }, [areParentSkillsComplete, send]);
 
   return (
-    <div
-      onClick={() => {
-        if (isLocked) return;
-
-        return send("TOGGLE");
-      }}
-    >
+    <div onClick={() => send("TOGGLE")}>
       <div />
-      <div style={{ backgroundColor: isComplete ? "red" : "blue" }}>
+      <div data-state={state.toStrings().join(" ")}>
         <p style={{ color: "white" }}>Skill</p>
       </div>
     </div>

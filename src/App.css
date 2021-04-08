@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+div [data-state*="completed"] {
+  background-color: red;
+}
+
+div [data-state*="uncompleted"] {
+  background-color: blue;
+}
+
+div [data-state*="disabled"] {
+  background-color: grey;
+}
